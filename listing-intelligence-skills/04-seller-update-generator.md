@@ -106,11 +106,15 @@ At the bottom, include a short internal source note listing:
 - Mortgage-rate source
 - Number of showing-feedback records reviewed
 
-Immediately after those lines, include copy-pasteable workbook data so the agent never has to hunt for it in a separate report:
+Immediately after those lines, include copy-pasteable workbook data so the agent never has to hunt for it in a separate report. A Markdown table pasted from a PDF does not paste cleanly into Google Sheets or Excel — cell boundaries don't survive the copy. So provide both:
 
-- **Workbook paste — Market History (new row):** a Markdown table using the exact `Market History` column order (see Area Market Research skill), containing only the row proposed for this listing's market/reporting date. If this listing shares a market with another listing already processed in the same run, state that the row was already provided under the other listing instead of repeating it.
-- **Workbook paste — Listings corrections (verified only):** a Markdown table with columns `Listing ID | Field | Existing Value | Verified Value | Source`, containing only verified discrepancies from the Public Listing Page Review for this listing. If there are none, write `No verified workbook corrections for this listing.`
-- Never include unverified, inferred, or calculated-only values (e.g. calculated listing age) in the corrections table — only fields explicitly confirmed against a public source.
+- A Markdown table in the note itself, for quick visual review of what changed.
+- A companion **CSV file** (when the platform can create files), one per table, so the agent can paste directly into a spreadsheet without reformatting:
+  - `market_history_update_[YYYY-MM-DD].csv` — one row per listing/market processed this run that needs a new `Market History` entry, using the exact workbook column headers as the CSV header row. If multiple listings share a market, include that market's row only once.
+  - `listings_corrections_[YYYY-MM-DD].csv` — columns `Listing ID,Field,Existing Value,Verified Value,Source`, containing only verified discrepancies from the Public Listing Page Review across all listings processed this run. Omit the file (or note `No verified workbook corrections this run.`) if there are none.
+  - Quote any CSV field that itself contains a comma (e.g. `"$475,000"`) so columns don't shift on import — use a proper CSV writer/library rather than hand-joining strings with commas.
+  - Never include unverified, inferred, or calculated-only values (e.g. calculated listing age) in the corrections file — only fields explicitly confirmed against a public source.
+  - If the platform cannot create files, state that and fall back to the in-note Markdown table plus the instruction: `Copy each row manually — Markdown tables from PDFs do not paste cleanly into spreadsheets.`
 
 Label the whole section `Internal source note — remove before sending` unless the user asks to include sources in the client version.
 

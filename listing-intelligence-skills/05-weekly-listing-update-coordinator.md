@@ -72,7 +72,7 @@ Capture current public facts and identify verified discrepancies from the `Listi
 
 Create the seller-facing Markdown update. Create a PDF too only when file generation is supported.
 
-Per `04-seller-update-generator.md`, each draft's Internal source note now carries its own copy-pasteable `Market History` row and `Listings` corrections table for that listing — the agent should be able to paste workbook updates straight from the individual draft, without needing the run-level summary below.
+Per `04-seller-update-generator.md`, each draft's Internal source note now carries its own `Market History` row and `Listings` corrections table for that listing, plus companion CSV files. Markdown tables (including ones rendered into a PDF) do not paste cleanly into Google Sheets or Excel, so CSV is the primary paste path — the Markdown tables are for quick visual review only.
 
 ### Step 6 — Produce a review package
 
@@ -90,16 +90,21 @@ Return all results grouped by listing.
 
 ## Workbook Updates to Paste (consolidated)
 
-This section is a convenience roll-up of every table already included in the individual drafts below — useful for pasting several listings' updates at once. If you only need one listing's update, its own draft has everything required.
+This section is a convenience roll-up of every table already included in the individual drafts below — useful for reviewing several listings' updates at once. For actually updating the workbook, use the CSV files, not these Markdown tables (Markdown, especially once rendered into a PDF, does not paste cleanly into Google Sheets or Excel).
 
-### Market History rows
+Produce two consolidated CSV files for the run, each with the exact workbook column headers, quoting any field that itself contains a comma:
 
-Return one combined Markdown table using the exact workbook columns:
+- `market_history_update_[run-date].csv` — every new `Market History` row from this run (one row per market researched, not per listing, when markets are shared).
+- `listings_corrections_[run-date].csv` — every verified `Listings` correction from this run, columns `Listing ID,Field,Existing Value,Verified Value,Source`.
+
+If the platform cannot create files, state that plainly and tell the agent to copy each row manually from the Markdown tables below.
+
+### Market History rows (Markdown, for review only)
 
 | Week Ending | Market Name | Inventory | Pending Ratio | Months Supply of Inventory | Median Sale Price | Median Days on Market | Original Price to Sold Price | Mortgage Rate | AreaPro URL | Notes |
 |---|---|---:|---:|---:|---:|---:|---:|---:|---|---|
 
-### Verified Listings corrections
+### Verified Listings corrections (Markdown, for review only)
 
 | Listing ID | Field | Existing Value | Verified Value | Source |
 |---|---|---|---|---|
@@ -149,7 +154,7 @@ End with a short checklist:
 
 - Review each draft for tone and accuracy.
 - Approve any workbook corrections.
-- Paste new Market History rows (from either the per-listing draft or the consolidated section).
+- Paste new Market History rows and Listings corrections from the CSV files (open the CSV, select all, paste into the workbook — this preserves columns correctly, unlike copying from a PDF).
 - Remove internal source notes.
 - Copy the approved update into Google Docs.
 - Export PDF.
