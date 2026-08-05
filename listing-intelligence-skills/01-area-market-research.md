@@ -40,28 +40,48 @@ Use these `Market History` columns exactly:
 
 Run weekly for listings whose status is `Active`, `Pending`, or `Under Contract`, unless the user specifies otherwise.
 
+## Browsing method — AreaPro links (read this before opening any AreaPro URL)
+
+AreaPro share links (`app.areapro.com/s/...`) are JavaScript apps. The market
+numbers are not present in the initial HTML — they load client-side after
+the page mounts. A plain HTTP fetch (curl, `requests`, a fetch tool that
+only reads raw response bodies) will return an empty app shell with no
+numbers in it. **Do not treat that empty shell as "AreaPro is unreachable."**
+It means the page needs to render first.
+
+Default procedure for every AreaPro URL:
+
+1. Open the URL in a headless browser (e.g. Playwright with Chromium).
+2. Wait for network activity to settle — use a "networkidle" wait condition
+   (or equivalent), not just initial page load. Add a short fixed delay
+   (2-3 seconds) after that as a safety margin, since some client-side data
+   fetches complete just after the network-idle signal fires.
+3. Read the numbers from the rendered page. Prefer taking a full-page
+   screenshot and reading the values visually in addition to extracting
+   text — the flattened text of a card-based dashboard layout can put
+   adjacent numbers in a confusing order (e.g. multiple percentage labels
+   stacked together), and the screenshot resolves that ambiguity.
+4. Only if the rendered page still shows no data after step 2-3 (e.g. an
+   error state, a login wall, or the numbers genuinely blank) should you
+   treat AreaPro as unreachable for this run and fall back to the last
+   verified `Market History` row, per the Exceptions rule below.
+
+Do not guess at or call undocumented backend/API endpoints as a shortcut —
+this includes URLs referenced in page metadata (og:image, share IDs, etc.)
+that look like they might expose an API. Rendering the page is the correct
+and sufficient method; probing for hidden endpoints is not.
+
+**Environment note:** this rendering step requires a tool environment with
+code execution and a headless browser available (this is the case in
+Claude's code environment; ChatGPT Projects and Gemini Gems do not
+currently support this, so in those environments AreaPro links should be
+treated as unreachable and the fallback rule applies immediately).
+
 ## Procedure
-
-## Browsing method
-
-Try in this order, and don't stop at the first failure:
-
-1. Fetch the URL directly.
-2. If the page returns mostly empty content, a JS app shell, or a loading state,
-   render it with a headless browser instead: load the page, wait for network
-   activity to settle (not just initial page load), then read the rendered
-   text/DOM. AreaPro share links specifically require this — they load their
-   numbers client-side after the initial page load.
-3. Only mark AreaPro as "unreachable" and fall back to the last verified
-   Market History row if both direct fetch and the rendered-page read fail.
-
-Do not guess at or call undocumented backend/API endpoints as a workaround.
-If the rendered page still doesn't expose the numbers, treat it as
-unreachable and use the fallback rule below.
 
 For each qualifying listing:
 
-1. Open the `AreaPro Public Share URL`.
+1. Open the `AreaPro Public Share URL` using the browsing method above.
 2. Identify the market represented by the page.
 3. Capture the most current available values for:
    - Inventory
@@ -70,7 +90,7 @@ For each qualifying listing:
    - Median Sale Price
    - Median Days on Market
    - Original Price to Sold Price
-4. Record the reporting date shown by AreaPro. If no reporting date is displayed, use today's date and state that choice in `Notes`.
+4. Record the reporting date shown by AreaPro (usually in the page footer, e.g. "Market data as of [date]"). If no reporting date is displayed, use today's date and state that choice in `Notes`.
 5. Search the web for the current average 30-year fixed mortgage rate. Prefer a reputable national source. Record the rate and source date.
 6. Compare the new values with the most recent prior `Market History` row for the same `Market Name` or `AreaPro URL`.
 7. Write a one- or two-sentence factual trend note. Mention only material changes.
@@ -80,7 +100,9 @@ For each qualifying listing:
 
 - Preserve percentages as percentages, not whole numbers.
 - Example: 30% should be stored as `30%` or `0.30`, consistent with the workbook.
-- Do not confuse months supply with absorption rate.
+- Do not confuse months supply with absorption rate — AreaPro shows both side by side; Months Supply of Inventory and Absorption Rate are different metrics, only Months Supply of Inventory goes in the workbook.
+- "Median Days on Market" maps to AreaPro's "DoM (Sold)" figure, not "DoM (Active)" — the workbook has consistently tracked the sold-side DOM.
+- "Original Price to Sold Price" maps to the ratio spanning Original List Price → Sold Price (the outer bracket on AreaPro's Median Prices card), not the Original List Price → Final List Price or Final List Price → Sold Price sub-brackets.
 - Do not invent missing values.
 - If a field is unavailable, leave it blank and explain why in `Notes`.
 - Cite the AreaPro page and the mortgage-rate source in the research summary.
@@ -109,7 +131,9 @@ Return a Markdown table with columns in the exact workbook order:
 
 Before finishing, verify:
 
+- AreaPro was rendered (not just fetched raw) before being marked unreachable.
 - The values came from the correct AreaPro link.
+- Median Days on Market and Original Price to Sold Price were read from the correct AreaPro fields, not adjacent lookalike figures.
 - The mortgage rate is current and dated.
 - The market row does not duplicate an existing row for the same reporting date.
 - Every comparison uses the same market and metric definitions.
