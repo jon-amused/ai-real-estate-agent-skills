@@ -42,6 +42,23 @@ Run weekly for listings whose status is `Active`, `Pending`, or `Under Contract`
 
 ## Procedure
 
+## Browsing method
+
+Try in this order, and don't stop at the first failure:
+
+1. Fetch the URL directly.
+2. If the page returns mostly empty content, a JS app shell, or a loading state,
+   render it with a headless browser instead: load the page, wait for network
+   activity to settle (not just initial page load), then read the rendered
+   text/DOM. AreaPro share links specifically require this — they load their
+   numbers client-side after the initial page load.
+3. Only mark AreaPro as "unreachable" and fall back to the last verified
+   Market History row if both direct fetch and the rendered-page read fail.
+
+Do not guess at or call undocumented backend/API endpoints as a workaround.
+If the rendered page still doesn't expose the numbers, treat it as
+unreachable and use the fallback rule below.
+
 For each qualifying listing:
 
 1. Open the `AreaPro Public Share URL`.

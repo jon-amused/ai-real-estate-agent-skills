@@ -133,7 +133,7 @@ List the PDF filename/link if generated. Otherwise provide the Google Docs expor
 
 ## Exceptions and failure handling
 
-- If AreaPro cannot be opened, do not guess market values. Use the latest existing `Market History` row and clearly label it as not refreshed.
+- If AreaPro cannot be opened after both a direct fetch and a rendered-page read, do not guess market values.
 - If the public listing page cannot be opened, use workbook facts and label DOM as unavailable or calculated listing age.
 - If no showing feedback exists, say so plainly and do not imply buyer sentiment.
 - If multiple values conflict, present the conflict for agent review.
