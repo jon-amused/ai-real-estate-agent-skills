@@ -106,7 +106,13 @@ At the bottom, include a short internal source note listing:
 - Mortgage-rate source
 - Number of showing-feedback records reviewed
 
-Label this section `Internal source note — remove before sending` unless the user asks to include sources in the client version.
+Immediately after those lines, include copy-pasteable workbook data so the agent never has to hunt for it in a separate report:
+
+- **Workbook paste — Market History (new row):** a Markdown table using the exact `Market History` column order (see Area Market Research skill), containing only the row proposed for this listing's market/reporting date. If this listing shares a market with another listing already processed in the same run, state that the row was already provided under the other listing instead of repeating it.
+- **Workbook paste — Listings corrections (verified only):** a Markdown table with columns `Listing ID | Field | Existing Value | Verified Value | Source`, containing only verified discrepancies from the Public Listing Page Review for this listing. If there are none, write `No verified workbook corrections for this listing.`
+- Never include unverified, inferred, or calculated-only values (e.g. calculated listing age) in the corrections table — only fields explicitly confirmed against a public source.
+
+Label the whole section `Internal source note — remove before sending` unless the user asks to include sources in the client version.
 
 ## PDF behavior
 
@@ -126,3 +132,4 @@ Before finalizing:
 - Remove showing-agent names.
 - Mark calculated DOM accurately.
 - Ensure recommendations follow from the evidence.
+- Confirm the Internal source note includes both copy-pasteable tables (Market History row and Listings corrections), not just source links.

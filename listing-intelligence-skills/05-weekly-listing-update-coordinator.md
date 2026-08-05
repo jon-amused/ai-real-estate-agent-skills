@@ -72,6 +72,8 @@ Capture current public facts and identify verified discrepancies from the `Listi
 
 Create the seller-facing Markdown update. Create a PDF too only when file generation is supported.
 
+Per `04-seller-update-generator.md`, each draft's Internal source note now carries its own copy-pasteable `Market History` row and `Listings` corrections table for that listing — the agent should be able to paste workbook updates straight from the individual draft, without needing the run-level summary below.
+
 ### Step 6 — Produce a review package
 
 Return all results grouped by listing.
@@ -86,7 +88,9 @@ Return all results grouped by listing.
 **Drafts created:** [count]  
 **Listings skipped:** [count]
 
-## Workbook Updates to Paste
+## Workbook Updates to Paste (consolidated)
+
+This section is a convenience roll-up of every table already included in the individual drafts below — useful for pasting several listings' updates at once. If you only need one listing's update, its own draft has everything required.
 
 ### Market History rows
 
@@ -125,7 +129,7 @@ Current price, status, DOM or calculated age, and discrepancies.
 
 #### Seller update draft
 
-Insert the complete Markdown seller update.
+Insert the complete Markdown seller update, including its Internal source note with the per-listing copy-pasteable tables.
 
 #### Files
 
@@ -145,7 +149,7 @@ End with a short checklist:
 
 - Review each draft for tone and accuracy.
 - Approve any workbook corrections.
-- Paste new Market History rows.
+- Paste new Market History rows (from either the per-listing draft or the consolidated section).
 - Remove internal source notes.
 - Copy the approved update into Google Docs.
 - Export PDF.
@@ -159,4 +163,5 @@ Before completing the run:
 - Confirm shared markets were researched only once.
 - Confirm no duplicate market-history rows were proposed.
 - Confirm all seller drafts use the correct seller, address, price, and status.
+- Confirm each draft's Internal source note includes its own copy-pasteable tables.
 - Confirm nothing was sent automatically.
